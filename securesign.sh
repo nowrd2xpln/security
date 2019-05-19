@@ -6,6 +6,17 @@ echo $DIR
 input=""
 output=""
 
+# ERRORS
+NO_FILE_SPECIFIED=1
+
+# Helper Functions
+function print_usage() {
+    echo -e "Usage:\t$0 [options] -i input_file_path -o output_file_path\n"
+    echo -e "\tOptions:"
+    echo -e "\t\t-v, --version\t Print version"
+    echo -e "\n"
+}
+
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -33,9 +44,20 @@ esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
+if [[ -z $INPUT ]]; then
+    echo -e "\nNo input file provided\n\n"
+    print_usage
+    exit $NO_FILE_SPECIFIED
+fi
+if [[ -z $OUTPUT ]]; then
+    echo -e "\nNo output file provided\n\n"
+    exit -$NO_FILE_SPECIFIED
+fi
+
 echo ${INPUT}
 echo ${OUTPUT}
 echo ${DEFAULT}
 echo ${POSITIONAL}
 
 echo "GOOD BYE"
+
