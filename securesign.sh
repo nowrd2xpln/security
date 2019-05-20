@@ -1,10 +1,13 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 echo $DIR
+
+# Global Variables
 input=""
 output=""
+
+SIGNATURE=0xcafeface
 
 # ERRORS
 NO_FILE_SPECIFIED=1
@@ -17,6 +20,16 @@ function print_usage() {
     echo -e "\n"
 }
 
+function print_32byte() {
+    byte3="\x"$(echo $1 | cut -c3-4)
+    byte2="\x"$(echo $1 | cut -c5-6)
+    byte1="\x"$(echo $1 | cut -c7-8)
+    byte0="\x"$(echo $1 | cut -c9-10)
+    echo -en $byte0 
+    echo -en $byte1
+    echo -en $byte2
+    echo -en $byte3
+}
 while [[ $# -gt 0 ]]
 do
 key="$1"
@@ -54,10 +67,16 @@ if [[ -z $OUTPUT ]]; then
     exit -$NO_FILE_SPECIFIED
 fi
 
+# Build Binary
+echo "SIGNATURE: $SIGNATURE"
+print_32byte $SIGNATURE > $OUTPUT
+print_32byte 0x67453412 >> $OUTPUT
+print_32byte 0xEFCDAB89 >> $OUTPUT
+
+# DEBUG
 echo ${INPUT}
 echo ${OUTPUT}
 echo ${DEFAULT}
 echo ${POSITIONAL}
 
 echo "GOOD BYE"
-
