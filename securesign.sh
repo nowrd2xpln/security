@@ -45,6 +45,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -s|--signature)
+    SIGNATURE="$2"
+    shift # past argument
+    shift # past value
+    ;;
     --default)
     DEFAULT=YES
     shift # past argument
